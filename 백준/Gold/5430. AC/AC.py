@@ -7,7 +7,12 @@ N = int(input())
 for _ in range(N):
     p = input()
     n = int(input())
-    x_list = deque(ast.literal_eval(input()))
+    # x_list = deque(ast.literal_eval(input()))
+    array = input()
+    if n == 0:
+        x_list = deque()
+    else:
+        x_list = deque(map(int, array[1:-1].split(',')))
     r_flag = False
     
     for cmd in p:
