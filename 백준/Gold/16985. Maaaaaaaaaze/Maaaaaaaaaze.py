@@ -18,12 +18,16 @@ def rotate(square):
             rotated[x][y] = square[i][j]
     return rotated
 
-def rotate_four(sqaure):
-    square_1 = rotate(square)
-    square_2 = rotate(square_1)
-    square_3 = rotate(square_2)
+def rotate_four(square):
+    sqs = [square]
+    v = [square]
+    for n in range(3):
+        rt = rotate(sqs[n])
+        if rt not in sqs:
+            v.append(rt)    
+        sqs.append(rt)
 
-    return square, square_1, square_2, square_3
+    return v
 
 r_sqrs = []
 for square in squares:
@@ -65,7 +69,7 @@ def func(maze):
             continue
         else:
             vis[i] = True
-            for n in range(4):
+            for n in range(len(r_sqrs[i])):
                 if len(maze) == 0 and not r_sqrs[i][n][0][0]:
                     continue
                 if len(maze) == 4 and not r_sqrs[i][n][4][4]:
