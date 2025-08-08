@@ -29,27 +29,23 @@ def operator(n, a, b):
 
 MIN = float('inf')
 MAX = float('-inf')
-cnt = As[0]
-def func(w):
+def func(w, cnt):
     global MIN
     global MAX
-    global cnt
     
     if w == N:
         MIN = min(MIN, cnt)
         MAX = max(MAX, cnt)
         return
 
-    old_cnt = cnt
     for j in range(4):
         if ops[j]:
             ops[j] -= 1
-            cnt = operator(j, cnt, As[w])
-            func(w+1)
+            n_cnt = operator(j, cnt, As[w])
+            func(w+1, n_cnt)
             ops[j] += 1
-            cnt = old_cnt
-
-func(1)
+            
+func(1, As[0])
 
 print(MAX)
 print(MIN)
