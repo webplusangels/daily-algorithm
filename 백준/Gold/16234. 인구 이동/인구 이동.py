@@ -19,7 +19,7 @@ def func():
                 continue
             dq.append((i, j))
             tmp_u = [(i, j)]
-            tmp_c = [A[i][j]]
+            tmp_c = A[i][j]
             vis[i][j] = True
             while dq:
                 x, y = dq.popleft()
@@ -28,7 +28,7 @@ def func():
                     if 0 <= xx < N and 0 <= yy < N and not vis[xx][yy] and L <= abs(A[xx][yy]-A[x][y]) <= R:
                         dq.append((xx, yy))
                         tmp_u.append((xx, yy))
-                        tmp_c.append(A[xx][yy])
+                        tmp_c += A[xx][yy]
                         vis[xx][yy] = True
             union.append(tmp_u)
             capacity.append(tmp_c)
@@ -42,7 +42,7 @@ while True:
         print(cnt)
         break
     for i in range(l):
-        new_cap = sum(cap[i]) // len(cap[i])
+        new_cap = cap[i] // len(union[i])
         for (x, y) in union[i]:
             A[x][y] = new_cap
     cnt += 1
