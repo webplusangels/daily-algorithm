@@ -19,8 +19,9 @@ def solution(p):
                     return False
                 else:
                     stack.pop()
-        else:
-            return True
+        return not stack
+        # if not stack:
+        #     return True
     
     change = {'(': ')', ')': '('}
     
