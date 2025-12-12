@@ -1,7 +1,6 @@
 class Solution:
     def countWays(self, ranges: List[List[int]]) -> int:
         ranges.sort(key=lambda x: (x[0], x[1]))
-        print(ranges)
         parent = [n for n in range(len(ranges))]
 
         def find(x):
@@ -33,5 +32,4 @@ class Solution:
                 i += 1
                 
         
-        print([find(x) for x in range(len(ranges))])
         return 2 ** len(set(parent)) % (10 ** 9 + 7)
