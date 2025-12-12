@@ -7,5 +7,6 @@ FROM (
     ) AS sum_weight
     FROM Queue
 ) sub
-WHERE sum_weight >= 1000
+WHERE sum_weight <= 1000
+ORDER BY sum_weight DESC
 LIMIT 1
