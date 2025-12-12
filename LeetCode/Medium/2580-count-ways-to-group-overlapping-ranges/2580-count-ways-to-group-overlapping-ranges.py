@@ -20,8 +20,9 @@ class Solution:
             else:
                 parent[p_x] = p_y
 
-        i = 0
+        i = answer = 0
         while i < len(ranges):
+            answer += 1 
             s, e = ranges[i]
             par = i
             i += 1
@@ -30,6 +31,6 @@ class Solution:
                 if e < ranges[i][1]:
                     e = ranges[i][1]
                 i += 1
+
                 
-        
-        return 2 ** len(set(parent)) % (10 ** 9 + 7)
+        return 2 ** answer % (10 ** 9 + 7)
