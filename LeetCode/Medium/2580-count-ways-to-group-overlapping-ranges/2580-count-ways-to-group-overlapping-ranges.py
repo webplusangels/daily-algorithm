@@ -34,4 +34,4 @@ class Solution:
                 
         
         print([find(x) for x in range(len(ranges))])
-        return 2 ** len(set(parent))
+        return 2 ** len(set(parent)) % (10 ** 9 + 7)
