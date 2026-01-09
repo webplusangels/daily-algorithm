@@ -1,0 +1,20 @@
+-- 코드를 작성해주세요
+WITH Ecoli_Size AS (
+    SELECT *, RANK() OVER ( 
+    ORDER BY SIZE_OF_COLONY DESC) AS rnk
+    FROM ECOLI_DATA
+),
+Sum_Ecoli AS (
+    SELECT COUNT(*) AS sm
+    FROM ECOLI_DATA
+)
+
+SELECT ID, 
+  CASE 
+    WHEN rnk BETWEEN 0 AND (SELECT sm FROM Sum_Ecoli) / 4 THEN 'CRITICAL'
+    WHEN rnk BETWEEN (SELECT sm FROM Sum_Ecoli) / 4 AND (SELECT sm FROM Sum_Ecoli) / 2 THEN 'HIGH'
+    WHEN rnk BETWEEN (SELECT sm FROM Sum_Ecoli) / 2 AND (SELECT sm FROM Sum_Ecoli) / 4 * 3 THEN 'MEDIUM'
+    ELSE 'LOW' 
+  END AS COLONY_NAME
+FROM Ecoli_Size
+ORDER BY ID
