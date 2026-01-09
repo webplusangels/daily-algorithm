@@ -1,0 +1,25 @@
+-- 사원별 성과금 정보
+-- 사번, 성명, 평가 등급(GRADE), 성과금(BONUS)
+-- 사번 기준 오름차순
+WITH HR_RESULT AS (
+    SELECT hg.EMP_NO, he.EMP_NAME, AVG(hg.SCORE) AS SCORE, he.SAL
+    FROM HR_GRADE hg
+    LEFT JOIN HR_EMPLOYEES he ON he.EMP_NO = hg.EMP_NO
+    GROUP BY hg.EMP_NO
+)
+
+SELECT EMP_NO, EMP_NAME, 
+    CASE
+      WHEN SCORE >= 96 THEN 'S'
+      WHEN SCORE >= 90 THEN 'A'
+      WHEN SCORE >= 80 THEN 'B'
+      ELSE 'C'
+    END AS GRADE,
+    CASE
+      WHEN SCORE >= 96 THEN SAL * 0.2
+      WHEN SCORE >= 90 THEN SAL * 0.15
+      WHEN SCORE >= 80 THEN SAL * 0.1
+      ELSE 0
+    END AS BONUS
+FROM HR_RESULT
+ORDER BY EMP_NO
