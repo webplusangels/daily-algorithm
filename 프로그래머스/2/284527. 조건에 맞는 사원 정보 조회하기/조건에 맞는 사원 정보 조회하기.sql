@@ -1,0 +1,10 @@
+-- 2022년 평가 점수가 가장 높은 사원 정보
+-- 점수, 사번, 성명, 직책, 이메일
+SELECT SUM(hg.SCORE) AS SCORE, 
+    he.EMP_NO, he.EMP_NAME, he.POSITION, he.EMAIL
+FROM HR_EMPLOYEES he
+LEFT JOIN HR_GRADE hg ON he.EMP_NO = hg.EMP_NO
+WHERE hg.YEAR = 2022
+GROUP BY he.EMP_NO, he.EMP_NAME, he.POSITION, he.EMAIL
+ORDER BY SCORE DESC
+LIMIT 1
