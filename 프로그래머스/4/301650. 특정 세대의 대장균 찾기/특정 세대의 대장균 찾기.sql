@@ -1,0 +1,16 @@
+WITH RECURSIVE Generations AS (
+    SELECT ID, PARENT_ID, 1 AS GEN
+    FROM ECOLI_DATA
+    WHERE PARENT_ID IS NULL
+    
+    UNION ALL
+    
+    SELECT e.ID, e.PARENT_ID, g.GEN + 1
+    FROM ECOLI_DATA e
+    INNER JOIN Generations g ON e.PARENT_ID = g.ID
+)
+
+SELECT ID
+FROM Generations
+WHERE GEN = 3
+ORDER BY ID
