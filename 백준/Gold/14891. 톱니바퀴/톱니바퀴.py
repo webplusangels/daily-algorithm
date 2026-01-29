@@ -2,53 +2,56 @@ import sys
 from collections import deque
 input = lambda: sys.stdin.readline().rstrip()
 
-wheels = []
-for _ in range(4):
-    wheel = deque(map(int, list(input())))
-    wheels.append(wheel)
-
+chains = [deque(map(int, list(input()))) for _ in range(4)]
 K = int(input())
-rots = []
-for _ in range(K):
-    rot = list(map(int, input().split()))
-    rots.append(rot)
+spins = [list(map(int, input().split())) for _ in range(K)]
 
-# 3번째와 7번째
-def connection():
-    connected = []
-    for i, wheel in enumerate(wheels):
-        if i == 0:
-            third = wheel[2]
-            continue
-        if third != wheel[6]:
-            connected.append(True)
-        else:
-            connected.append(False)
-        third = wheel[2]
-    return connected
+# 1번의 idx 2, 2번의 6/ 2번의 2, 3번의 6/ 3번의 2, 4번의 6
+state = [chains[0][2] != chains[1][6], chains[1][2] != chains[2][6], chains[2][2] != chains[3][6]]
 
-def rotated_wheel(t, conn):
-    wheels[t[0]-1].rotate(t[1])
-    # 왼쪽
-    l_num, l_rot = t
-    while l_num > 1:
-        if conn[l_num-2] == False:
-            break
-        l_rot = -1 * l_rot
-        wheels[l_num-2].rotate(l_rot)
-        l_num -= 1
-    # 오른쪽
-    r_num, r_rot = t
-    while r_num < 4:
-        if conn[r_num-1] == False:
-            break
-        r_rot = -1 * r_rot
-        wheels[r_num].rotate(r_rot)
-        r_num += 1
 
-for r in rots:
-    con = connection()
-    rotated_wheel(r, con)
+# 시계 1, 반시계 -1
+for spin in spins:
+    num, dir = spin
+    chains[num-1].rotate(dir)
+    # 1번을 돌리면 1 -> 0
+    # 2번을 돌리면 0, 2 -> 0 1
+    # 3번을 돌리면 1, 3 -> 1 2
+    # 4번을 돌리면 3 -> 2
 
-point = wheels[0][0] * 1 + wheels[1][0] * 2 + wheels[2][0] * 4 + wheels[3][0] * 8
-print(point)
+    if num == 1:
+        if state[0]:
+            chains[1].rotate(-dir)
+            if state[1]:
+                chains[2].rotate(dir)
+                if state[2]:
+                    chains[3].rotate(-dir)
+    elif num == 2:
+        if state[0]:
+            chains[0].rotate(-dir)
+        if state[1]:
+            chains[2].rotate(-dir)
+            if state[2]:
+                chains[3].rotate(dir)
+    elif num == 3:
+        if state[1]:
+            chains[1].rotate(-dir)
+            if state[0]:
+                chains[0].rotate(dir)
+        if state[2]:
+            chains[3].rotate(-dir)
+    elif num == 4:
+        if state[2]:
+            chains[2].rotate(-dir)
+            if state[1]:
+                chains[1].rotate(dir)
+                if state[0]:
+                    chains[0].rotate(-dir)
+    # state 확인
+    state = [chains[0][2] != chains[1][6], chains[1][2] != chains[2][6], chains[2][2] != chains[3][6]]
+
+score = 0
+for i, chain in enumerate(chains):
+    score += chain[0]*(2**i)
+
+print(score)
